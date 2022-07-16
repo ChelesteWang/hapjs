@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+name: CI
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: gengjiawen/android-ndk:qa-2020-07-31
+    steps:
+      - uses: actions/checkout@v2
+      # 构建程序 打包
+      - run: |
+          cd ./mockup/platform/android
+          ./gradlew assembleRelease
+          ./gradlew assembleDebug
+      - name: Commit and push
+        run: git config --global user.email "1581446178@qq.com"&&git config --global user.name "ChelesteWang"
+      # 使用上面的 sh 脚本提交和推送
+      # 或者使用 git 命令
+      - name: check for changes
+        run: git init
+      - name: stage changed files
+        run: git add .
+      - name: commit changed files
+        run: git commit -m "update by github actions"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITFLOW }}
+          branch: test-build
+          force: true
