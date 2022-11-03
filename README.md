@@ -175,4 +175,4 @@ adb install -r -d app/build/outputs/apk/phone/debug/phone/debug/app-phone-debug.
 
 
 
-
+1
